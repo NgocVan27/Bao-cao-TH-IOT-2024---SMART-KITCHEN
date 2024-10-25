@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Kitchen</title>
+    <link rel="icon" href="image/favicon-big.png" type="image/x-icon">
+    <link rel="shortcut icon" href="image/favicon-big.png" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="content">
+        <header>
+            <table style="width: 100%; border: none;">
+                <tr>
+                    <th style="width: 20%; padding: 0;">
+                        <img src="image\logo.avif" id="logo">
+                    </th>
+                    <th style="width: 80%; padding: 0;">
+                        <h1><b>SMART KITCHEN</b></h1>
+                        <h1 id="date"><b>...</b></h1>
+                        <h1 id="time"><b>...</b></h1>
+                    </th>
+                </tr>
+            </table>
+        </header>
+        <div id="main">
+            <div class="card-container">
+                <div class="card">
+                    <img id="TEMP-IMG" src="image\temp-normal.png">
+                    <div class="card-info">
+                        <h1>Nhiệt Độ</h1>
+                        <h1 id="TEMP">...</h1>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="image\humi.png">
+                    <div class="card-info">
+                        <h1>Độ Ẩm</h1>
+                        <h1 id="HUMI">...</h1>
+                    </div>
+                </div>
+                <div class="card">
+                    <img id="GAS-IMG" src="image\gas.png">
+                    <div class="card-info">
+                        <h1>Khí Gas</h1>
+                        <h1 id="GAS">...</h1>
+                    </div>
+                </div>
+                <div class="card">
+                    <img style="width: auto; height: 80%;" src="image\fan_off.png" id="fan">
+                    <div class="card-info-btn">
+                        <button type="button" id="btn1"><b>ON</b></button>
+                        <button type="button" id="btn2"><b>OFF</b></button>
+                    </div>
+                </div>
+                <div class="card">
+                    <img style="width: auto; height: 80%;" src="image\dark.png" id="led">
+                    <div class="card-info-btn">
+                        <button type="button" id="btn3"><b>ON</b></button>
+                        <button type="button" id="btn4"><b>OFF</b></button>
+                    </div>
+                </div>
+                <div class="card">
+                    <img style="width: auto; height: 80%;" src="image\warning-off.png" id="buzz">
+                    <div class="card-info-btn">
+                        <button type="button" id="btn5"><b>ON</b></button>
+                        <button type="button" id="btn6"><b>OFF</b></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <div class="team">
+                <h2>Nhóm IOT (25HKI-ITFL416064_02SP3C-VHVL-357)</h2>
+                <div class="member">
+                    <img src="image/avatarTrung.png" id="avatar">
+                    <div class="member-info">
+                        <span><b>Huỳnh Đỗ Hoàng Trung</b></span>
+                        <span><b>MSSV: 22661039</b></span>
+                    </div>
+                </div>
+                <div class="member">
+                    <img src="image/avatarNam.jpg" id="avatar">
+                    <div class="member-info">
+                        <span><b>Nguyễn Văn Nam</b></span>
+                        <span><b>MSSV: 22661024</b></span>
+                    </div>
+                </div>
+                <div class="member">
+                    <img src="image/avatarPhuc.png" id="avatar">
+                    <div class="member-info">
+                        <span><b>Chu Ích Bảo Phúc</b></span>
+                        <span><b>MSSV: 22661029</b></span>
+                    </div>
+                </div>
+                <div class="member">
+                    <img src="image/avatarVan.png" id="avatar">
+                    <div class="member-info">
+                        <span><b>Nguyễn Thị Ngọc Vân</b></span>
+                        <span><b>MSSV: 22661041</b></span>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>
+
+<script>
+    function dongho() {
+        var time = new Date();
+        var gio = time.getHours();
+        var phut = time.getMinutes();
+        var giay = time.getSeconds();
+        var ngay = time.getDate();
+        var thang = time.getMonth() + 1; // Tháng bắt đầu từ 0
+        var nam = time.getFullYear();
+
+        // Mảng tên thứ trong tuần
+        var thu = ["Chủ Nhật", "Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy"];
+        var tenThu = thu[time.getDay()]; // Lấy tên thứ
+
+        if (gio < 10)
+            gio = "0" + gio;
+        if (phut < 10)
+            phut = "0" + phut;
+        if (giay < 10)
+            giay = "0" + giay;
+        if (ngay < 10) ngay = "0" + ngay;
+        if (thang < 10) thang = "0" + thang;
+
+        document.getElementById("time").innerHTML = gio + ":" + phut + ":" + giay;
+        document.getElementById("date").innerHTML = tenThu + " - " + ngay + "/" + thang + "/" + nam;
+
+        setTimeout("dongho()", 1000);
+    };
+    dongho();
+</script>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js";
+    import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-database.js";
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyCMFsFfyjsU-qSBabNjaHLuW0tnLR3RRkI",
+        authDomain: "iots37.firebaseapp.com",
+        databaseURL: "https://iots37-default-rtdb.firebaseio.com",
+        projectId: "iots37",
+        storageBucket: "iots37.appspot.com",
+        messagingSenderId: "105737734091",
+        appId: "1:105737734091:web:8dd594c72e28459c58d84e"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+
+    // Function to fetch real-time data
+    function fetchData() {
+        const nhietDoRef = ref(database, 'data_s/temperature'); // Temperature path
+        const doAmRef = ref(database, 'data_s/humidity'); // Humidity path
+        const khiGasRef = ref(database, 'data_s/gas'); // Gas path
+
+        const mayLanhRef = ref(database, 'fan');
+        const denRef = ref(database, 'led3');
+        const loaRef = ref(database, 'buzzer');
+
+        // Fetch temperature
+        onValue(nhietDoRef, (snapshot) => {
+            const nhietDo = snapshot.val();
+            document.getElementById('TEMP').innerText = `${nhietDo} °C`;
+
+            //! Nhiệt độ trên 30 tự bật quạt
+            if (nhietDo >= 30) {
+                document.getElementById("TEMP-IMG").src = "image/temp-hot.png";
+                activateFan();
+            } else if (nhietDo >= 25) {
+                document.getElementById("TEMP-IMG").src = "image/temp-normal.png";
+            }
+            //! Nhiệt độ dưới 25 tự tắt quạt 
+            else {
+                document.getElementById("TEMP-IMG").src = "image/temp-cold.png";
+                deactivateFan();
+            }
+        });
+
+        // Fetch humidity
+        onValue(doAmRef, (snapshot) => {
+            const doAm = snapshot.val();
+            document.getElementById('HUMI').innerText = `${doAm} %`;
+        });
+
+        // Fetch gas
+        onValue(khiGasRef, (snapshot) => {
+            const khiGas = snapshot.val();
+            document.getElementById('GAS').innerText = `${khiGas} %`;
+
+            //! Gas trên 80% tự động bật còi
+            if (khiGas >= 80) {
+                document.getElementById("GAS-IMG").src = "image/flame.png";
+                activateWarning();
+            }
+            else {
+                document.getElementById("GAS-IMG").src = "image/gas.png";
+                deactivateWarning();
+            }
+        });
+
+        // Fetch may_lanh
+        onValue(mayLanhRef, (snapshot) => {
+            const mayLanh = snapshot.val();
+            if (mayLanh == 1)
+                img1.src = 'image/fan_running.png';
+            else if (mayLanh == 0)
+                img1.src = 'image/fan_off.png';
+        });
+
+        // Fetch den
+        onValue(denRef, (snapshot) => {
+            const den = snapshot.val();
+            if (den == 1)
+                img2.src = 'image/light.png';
+            else if (den == 0)
+                img2.src = 'image/dark.png';
+        });
+
+        // Fetch loa
+        onValue(loaRef, (snapshot) => {
+            const loa = snapshot.val();
+            if (loa == 1)
+                img3.src = 'image/warning-on.png';
+            else if (loa == 0)
+                img3.src = 'image/warning-off.png';
+        });
+    }
+
+    // Call the function to fetch data
+    fetchData();
+
+    // Initialize buttons and images
+    const btn1 = document.querySelector('#btn1');
+    const btn2 = document.querySelector('#btn2');
+    const img1 = document.querySelector('#fan');
+    const btn3 = document.querySelector('#btn3');
+    const btn4 = document.querySelector('#btn4');
+    const img2 = document.querySelector('#led');
+    const btn5 = document.querySelector('#btn5');
+    const btn6 = document.querySelector('#btn6');
+    const img3 = document.querySelector('#buzz');
+
+    // Button functions for fan control
+    function activateFan() {
+        img1.src = 'image/fan_running.png';
+        set(ref(database, "fan"),1 );
+    }
+    function deactivateFan() {
+        img1.src = 'image/fan_off.png';
+        set(ref(database, "fan"), 0 );
+    }
+    btn1.addEventListener('click', () => {
+        activateFan();
+    });
+    btn2.addEventListener('click', () => {
+        deactivateFan();
+    });
+
+    // Button functions for LED control
+    btn3.addEventListener('click', () => {
+        img2.src = 'image/light.png';
+        set(ref(database, "led3"),1 );
+    });
+    btn4.addEventListener('click', () => {
+        img2.src = 'image/dark.png';
+        set(ref(database, "led3"), 0 );
+    });
+
+    // Button functions for speaker control
+    function activateWarning() {
+        img3.src = 'image/warning-on.png';
+        set(ref(database, "buzzer"),1 );
+    }
+    function deactivateWarning() {
+        img3.src = 'image/warning-off.png';
+        set(ref(database, "buzzer"),0);
+    }
+    btn5.addEventListener('click', () => {
+        activateWarning();
+    });
+    btn6.addEventListener('click', () => {
+        deactivateWarning();
+    });
+</script>
+
+</html>
